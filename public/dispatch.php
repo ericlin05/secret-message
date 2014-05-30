@@ -9,8 +9,7 @@ if (@include(__DIR__.'/../src/Tonic/Autoloader.php')) { // use Tonic autoloader
 
 $config = array(
     'load' => array(
-        __DIR__.'/../src/Tyrell/*.php', // load example resources
-        __DIR__.'/../vendor/peej/tonic/src/Tyrell/*.php' // load examples from composer's vendor directory
+        __DIR__.'/../resources/*.php', // load example resources
     ),
     #'mount' => array('Tyrell' => '/nexus'), // mount in example resources at URL /nexus
     #'cache' => new Tonic\MetadataCacheFile('/tmp/tonic.cache') // use the metadata cache
@@ -18,6 +17,14 @@ $config = array(
 );
 
 $app = new Tonic\Application($config);
+
+// set up the container
+$container = new Pimple();
+$container['db_config'] = array(
+    'dsn' => 'mysql:host=localhost;dbname=privstuff',
+    'username' => 'privstuff',
+    'password' => 'privstuff'
+);
 
 #echo $app; die;
 
@@ -30,6 +37,7 @@ try {
     $resource = $app->getResource($request);
 
     #echo $resource; die;
+    $resource->container = $container;
 
     $response = $resource->exec();
 
@@ -51,4 +59,3 @@ try {
 #echo $response;
 
 $response->output();
-

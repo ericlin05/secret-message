@@ -1,7 +1,7 @@
 <?php
 
 // load autoloader (delete as appropriate)
-if (@include(__DIR__.'/../src/Tonic/Autoloader.php')) { // use Tonic autoloader
+if (@include(__DIR__.'/../vendor/peej/Tonic/src/Tonic/Autoloader.php')) { // use Tonic autoloader
     #new Tonic\Autoloader('myNamespace'); // add another namespace
 } elseif (!@include(__DIR__.'/../vendor/autoload.php')) { // use Composer autoloader
     die('Could not find autoloader');
@@ -50,7 +50,7 @@ try {
 
 } catch (Tonic\MethodNotAllowedException $e) {
     $response = new Tonic\Response($e->getCode(), $e->getMessage());
-    $response->allow = implode(', ', $resource->allowedMethods());
+//    $response->allow = implode(', ', $resource->allowedMethods());
 
 } catch (Tonic\Exception $e) {
     $response = new Tonic\Response($e->getCode(), $e->getMessage());

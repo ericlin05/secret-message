@@ -2,20 +2,23 @@
 
 namespace PrivStuff\Resource;
 
-use \PrivStuff\Resource\Base,
-    \Tonic\NotFoundException;
+use \PrivStuff\Lib\Encryption;
+use \Tonic\NotFoundException;
 
 /**
- * Add description here
+ * The resource that represents the private note that user can create and retrieve
  *
  * User: ericlin
  * Date: 30/05/2014
  *
  * @uri /note
+ * @uri /note/:id/:key
  */
 class Note extends Base
 {
     /**
+     * @param string $id
+     * @param string $key
      *
      * @method GET
      * @provides application/json
@@ -23,15 +26,54 @@ class Note extends Base
      * @return string
      * @throws NotFoundException
      */
-    public function getNote()
+    public function get($id, $key)
     {
         $db = $this->_getDB();
+        $crypt = new Encryption($key);
 
-        $stmt = $db->query("SELECT data FROM note WHERE id = 1");
-        if (!$stmt) {
-            throw new NotFoundException;
+        $stmt = $db->prepare("SELECT data FROM note WHERE id = :id");
+        $stmt->execute(array(':id' => $id));
+
+        $ret = array('status' => 'failed', 'data' => null);
+
+        if ($stmt->rowCount() > 0) {
+            $data = trim($crypt->decrypt($stmt->fetchColumn()));
+            if($data) {
+                $ret['status'] = 'success';
+                $ret['data'] = $data;
+            }
+
+            // remove the note
+            $stmt = $db->prepare("DELETE FROM note WHERE id = :id");
+            $stmt->execute(array(':id' => $id));
         }
 
-        return json_encode(array($stmt->fetchColumn()));
+        return json_encode($ret);
+    }
+
+    /**
+     * @method POST
+     * @provides application/json
+     *
+     * @return string
+     */
+    public function create()
+    {
+        $key = Encryption::getRandomKey(13);
+
+        $crypt = new Encryption($key);
+        $encoded = $crypt->encrypt(trim($this->request->data));
+
+        $id = uniqid();
+
+        $db = $this->_getDB();
+        $stmt = $db->prepare("INSERT INTO note (id, data, created_at) VALUES (:id, :data, NOW())");
+        $status = $stmt->execute(array(':id' => $id, ':data' => $encoded));
+
+        if($status) {
+            return json_encode(array('status' => 'success', 'key' => $key, 'id' => $id));
+        }
+
+        return json_encode(array('status' => 'failed'));
     }
 }

@@ -3,12 +3,14 @@
 namespace PrivStuff\Lib;
 
 /**
-* Class to provide 2 way encryption of data
-*
-* @author    Kevin Waterson
-* @copyright    2009    PHPRO.ORG
-*
-*/
+ * http://www.phpro.org/classes/Two-Way-Encryption-With-PHP-Mcrypt.html#
+ *
+ * Class to provide 2 way encryption of data
+ *
+ * @author    Kevin Waterson
+ * @copyright    2009    PHPRO.ORG
+ *
+ */
 class Encryption
 {
     protected $key;
@@ -17,6 +19,7 @@ class Encryption
     {
         $this->key = $key;
     }
+
     /**
      *
      * This is called when we wish to set a variable

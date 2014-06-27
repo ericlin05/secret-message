@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+        <title>Private Stuff</title>
+
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+            <!-- Optional theme -->
+            <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+        <!-- Custom styles for this template -->
+        <link href="css/jumbotron-narrow.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script type="text/javascript">
+            function submitForm() {
+                $.ajax(
+                    {
+                        url: "http://test.example.com/note",
+                        type: "POST",
+                        data: $("#my_test").val(),
+                        success: function(data, status) {
+                            var d = $.parseJSON(data);
+                            var url = 'http://test.example.com/note/' + d.uniq_id + '/' + d.key;
+
+                            $('#note-form').hide();
+                            $('#message-note').show();
+                            $('#link-note').html(url);
+                            $('#destroy-link').attr('href', url);
+                        }
+                    }
+                );
+                return false;
+            }
+
+            var ids = ['home', 'file', 'about', 'contact'];
+            function show(id_to_show) {
+                hideAll();
+                $('#'+id_to_show).show();
+            }
+
+            function hideAll() {
+                for(x in ids) {
+                    $('#'+ids[x]).hide();
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+
+        <div class="container">
+            <div class="header">
+                <ul class="nav nav-pills pull-right">
+                    <li class="active"><a href="#home" onclick="show('home');">Home</a></li>
+                    <li><a href="#about" onclick="show('about');">About</a></li>
+                    <li><a href="#contact" onclick="show('contact');">Contact</a></li>
+                </ul>
+                <h3 class="text-muted">Private Stuff</h3>
+            </div>
+
+            <div id="main-content" class="jumbotron">
+                <div id="home">
+                    <h1>Private Note</h1>
+                    <div class="lead" style="text-align: left;">
+                        <ol>
+                            <li>Enter your private note below</li>
+                            <li>Click on "Create Note" button.</li>
+                            <li>Copy the link and then send to your friend</li>
+                        </ol>
+                    </div>
+
+                    <div id="note-form">
+                        <form action="http://test.example.com/note" method="post" id="theform">
+                            <textarea name="my_test" id="my_test" rows="10" cols="80"></textarea>
+                        </form>
+
+                        <br />
+                        <p><a class="btn btn-lg btn-success" href="#" role="button" onclick="submitForm();">Create Note</a></p>
+                    </div>
+
+                    <div id="message-note">
+                        <div style="text-align: left; margin-bottom: 10px;">
+                            You can now copy and send the below link to your friend via email or instant messenger.
+                            <br />The note will be destroyed as soon as it is read by the recipient.
+                            <br />Or if you change your mind, you can <a id="destroy-link" href="">destroy it now</a>.
+                        </div>
+
+                        <div id="link-note"></div>
+                    </div>
+                </div>
+
+                <div id="file">
+                    file
+                </div>
+
+                <div id="about">
+                    About
+                </div>
+
+                <div id="contact">
+                    Contact
+                </div>
+            </div>
+
+            <div class="row marketing">
+                <div class="col-lg-6">
+                    <h4>Subheading</h4>
+                    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+                </div>
+
+                <div class="col-lg-6">
+                    <h4>Subheading</h4>
+                    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>&copy; Private Stuff &copy; 2014</p>
+            </div>
+
+        </div> <!-- /container -->
+
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="//code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+</html>

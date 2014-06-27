@@ -17,7 +17,7 @@ use \Tonic\NotFoundException;
 class Note extends Base
 {
     /**
-     * @param string $id
+     * @param string $uniqId
      * @param string $key
      *
      * @method GET
@@ -26,13 +26,13 @@ class Note extends Base
      * @return string
      * @throws NotFoundException
      */
-    public function get($id, $key)
+    public function get($uniqId, $key)
     {
         $db = $this->_getDB();
         $crypt = new Encryption($key);
 
-        $stmt = $db->prepare("SELECT data FROM note WHERE id = :id");
-        $stmt->execute(array(':id' => $id));
+        $stmt = $db->prepare("SELECT data FROM note WHERE uniq_id = :uniq_id");
+        $stmt->execute(array(':uniq_id' => $uniqId));
 
         $ret = array('status' => 'failed', 'data' => null);
 
@@ -44,8 +44,8 @@ class Note extends Base
             }
 
             // remove the note
-            $stmt = $db->prepare("DELETE FROM note WHERE id = :id");
-            $stmt->execute(array(':id' => $id));
+            $stmt = $db->prepare("DELETE FROM note WHERE uniq_id = :uniq_id");
+            $stmt->execute(array(':uniq_id' => $uniqId));
         }
 
         return json_encode($ret);
@@ -64,14 +64,14 @@ class Note extends Base
         $crypt = new Encryption($key);
         $encoded = $crypt->encrypt(trim($this->request->data));
 
-        $id = uniqid();
+        $uniqId = uniqid();
 
         $db = $this->_getDB();
-        $stmt = $db->prepare("INSERT INTO note (id, data, created_at) VALUES (:id, :data, NOW())");
-        $status = $stmt->execute(array(':id' => $id, ':data' => $encoded));
+        $stmt = $db->prepare("INSERT INTO note (uniq_id, data, created_at) VALUES (:id, :data, NOW())");
+        $status = $stmt->execute(array(':id' => $uniqId, ':data' => $encoded));
 
         if($status) {
-            return json_encode(array('status' => 'success', 'key' => $key, 'id' => $id));
+            return json_encode(array('status' => 'success', 'key' => $key, 'uniq_id' => $uniqId));
         }
 
         return json_encode(array('status' => 'failed'));

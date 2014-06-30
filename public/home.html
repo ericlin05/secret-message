@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="privateStuffApp">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,72 +10,40 @@
 
         <title>Private Stuff</title>
 
-            <!-- Latest compiled and minified CSS -->
-            <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
-            <!-- Optional theme -->
-            <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 
         <!-- Custom styles for this template -->
         <link href="css/jumbotron-narrow.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
 
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.13/angular.min.js"></script>
+        <script src="js/controller.js"></script>
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-
-        <script type="text/javascript">
-            function submitForm() {
-                $.ajax(
-                    {
-                        url: "http://test.example.com/note",
-                        type: "POST",
-                        data: $("#my_test").val(),
-                        success: function(data, status) {
-                            var d = $.parseJSON(data);
-                            var url = 'http://test.example.com/note/' + d.uniq_id + '/' + d.key;
-
-                            $('#note-form').hide();
-                            $('#message-note').show();
-                            $('#link-note').html(url);
-                            $('#destroy-link').attr('href', url);
-                        }
-                    }
-                );
-                return false;
-            }
-
-            var ids = ['home', 'file', 'about', 'contact'];
-            function show(id_to_show) {
-                hideAll();
-                $('#'+id_to_show).show();
-            }
-
-            function hideAll() {
-                for(x in ids) {
-                    $('#'+ids[x]).hide();
-                }
-            }
-        </script>
     </head>
 
-    <body>
+    <body ng-controller="homeCtrl">
 
         <div class="container">
             <div class="header">
                 <ul class="nav nav-pills pull-right">
-                    <li class="active"><a href="#home" onclick="show('home');">Home</a></li>
-                    <li><a href="#about" onclick="show('about');">About</a></li>
-                    <li><a href="#contact" onclick="show('contact');">Contact</a></li>
+                    <li class="active"><a href="#home" ng-click="menuClick('home');">Home</a></li>
+                    <li><a href="#about" ng-click="menuClick('about');">About</a></li>
+                    <li><a href="#contact" ng-click="menuClick('contact');">Contact</a></li>
                 </ul>
                 <h3 class="text-muted">Private Stuff</h3>
             </div>
 
             <div id="main-content" class="jumbotron">
-                <div id="home">
+                <div id="home" ng-show="menu.home">
                     <h1>Private Note</h1>
                     <div class="lead" style="text-align: left;">
                         <ol>
@@ -85,35 +53,35 @@
                         </ol>
                     </div>
 
-                    <div id="note-form">
+                    <div id="note-form" ng-show="noteFormShow">
                         <form action="http://test.example.com/note" method="post" id="theform">
                             <textarea name="my_test" id="my_test" rows="10" cols="80"></textarea>
                         </form>
 
                         <br />
-                        <p><a class="btn btn-lg btn-success" href="#" role="button" onclick="submitForm();">Create Note</a></p>
+                        <p><a class="btn btn-lg btn-success" href="#" role="button" ng-click="submitNote();">Create Note</a></p>
                     </div>
 
-                    <div id="message-note">
+                    <div id="message-note" ng-show="messageNoteShow">
                         <div style="text-align: left; margin-bottom: 10px;">
                             You can now copy and send the below link to your friend via email or instant messenger.
                             <br />The note will be destroyed as soon as it is read by the recipient.
-                            <br />Or if you change your mind, you can <a id="destroy-link" href="">destroy it now</a>.
+                            <br />Or if you change your mind, you can <a id="destroy-link" ng-href="{{noteLink}}">destroy it now</a>.
                         </div>
 
-                        <div id="link-note"></div>
+                        <div id="link-note">{{noteLink}}</div>
                     </div>
                 </div>
 
-                <div id="file">
+                <div id="file" ng-show="menu.file">
                     file
                 </div>
 
-                <div id="about">
+                <div id="about" ng-show="menu.about">
                     About
                 </div>
 
-                <div id="contact">
+                <div id="contact" ng-show="menu.contact">
                     Contact
                 </div>
             </div>
@@ -135,7 +103,6 @@
             </div>
 
         </div> <!-- /container -->
-
 
         <!-- Bootstrap core JavaScript
         ================================================== -->

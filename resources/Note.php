@@ -11,8 +11,8 @@ use \Tonic\NotFoundException;
  * User: ericlin
  * Date: 30/05/2014
  *
- * @uri /note
- * @uri /note/:id/:key
+ * @uri /api/note
+ * @uri /api/note/:id/:key
  */
 class Note extends Base
 {

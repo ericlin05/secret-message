@@ -4,6 +4,7 @@ CREATE TABLE `note` (
   `data` blob NOT NULL,
   `version` tinyint(1) unsigned NOT NULL default '1',
   `created_at` datetime NOT NULL,
+  `destroyed_at` datetime default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `uniq_id` (`uniq_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;

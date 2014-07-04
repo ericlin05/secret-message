@@ -44,7 +44,7 @@ class Note extends Base
             }
 
             // remove the note
-            $stmt = $db->prepare("DELETE FROM note WHERE uniq_id = :uniq_id");
+            $stmt = $db->prepare("UPDATE note SET data = '', destroyed_at = NOW() WHERE uniq_id = :uniq_id");
             $stmt->execute(array(':uniq_id' => $uniqId));
         }
 

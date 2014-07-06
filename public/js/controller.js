@@ -27,7 +27,7 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl : '../pages/note.html',
             controller : 'noteCtrl'
         })
-        .when('/file', {
+        .when('/image', {
             templateUrl : '../pages/file.html',
             controller : 'fileCtrl'
         })

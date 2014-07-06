@@ -61,6 +61,7 @@ class Image extends Base
 
         $types = array(
             'image/jpeg' => 'jpg',
+            'image/jpg' => 'jpg',
             'image/png' => 'png',
             'image/gif' => 'gif',
         );

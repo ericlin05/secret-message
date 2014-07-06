@@ -17,7 +17,7 @@ class ImageFactory
     {
         switch ($mimeType) {
             case "image/jpeg":
-                return ImageJPEG($string);
+                return new ImageJPEG($string);
                 break;
 
             case "image/png":

@@ -2,6 +2,8 @@
 
 namespace PrivStuff\Lib\Image;
 
+require_once('Image.php');
+
 /**
  * Created by JetBrains PhpStorm.
  * User: ericlin

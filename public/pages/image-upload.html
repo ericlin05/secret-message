@@ -1,0 +1,31 @@
+<h1>Private Image</h1>
+<div class="lead" style="text-align: left;">
+    <ol>
+        <li>Upload your private image below</li>
+        <li>Click on "Upload Image" button.</li>
+        <li>Copy the link and then send to your friend</li>
+    </ol>
+</div>
+
+<div id="note-form" ng-show="noteFormShow">
+    <input type="file" ng-file-select="onFileSelect($files)" />
+    <!--
+    <div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class"
+         ng-show="dropSupported">drop files here</div>
+    <div ng-file-drop-available="dropSupported=true"
+         ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
+    <button ng-click="upload.abort()">Cancel Upload</button>
+    -->
+</div>
+
+<div id="image-loading" ng-show="loadingShow">Loading</div>
+
+<div id="message-note" ng-show="messageImageShow">
+    <div style="text-align: left; margin-bottom: 10px;">
+        You can now copy and send the below link to your friend via email or instant messenger.
+        <br />The note will be destroyed as soon as it is read by the recipient.
+        <br />Or if you change your mind, you can <a id="destroy-link" ng-href="{{imageLink}}">destroy it now</a>.
+    </div>
+
+    <div id="link-note">{{imageLink}}</div>
+</div>

@@ -5,8 +5,6 @@
  * Time: 3:19 PM
  * To change this template use File | Settings | File Templates.
  */
-
-
 var app = angular.module('privateStuffApp', ['ngRoute', 'angularFileUpload']);
 
 app.config(function($routeProvider, $locationProvider) {
@@ -27,8 +25,12 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl : '../pages/note.html',
             controller : 'noteCtrl'
         })
+        .when('/image/:id/:key', {
+            templateUrl : '../pages/image-view.html',
+            controller : 'imageViewCtrl'
+        })
         .when('/image', {
-            templateUrl : '../pages/file.html',
+            templateUrl : '../pages/image-upload.html',
             controller : 'fileCtrl'
         })
         .otherwise({ redirectTo: '/' });
@@ -69,7 +71,11 @@ app.controller('contactCtrl', function($scope) {
 });
 
 app.controller('fileCtrl', function($scope, $upload) {
+    $scope.loadingShow = false;
+    $scope.messageImageShow = false;
+    $scope.imageLink = '';
     $scope.onFileSelect = function($files) {
+        $scope.loadingShow = true;
         //$files: an array of files selected, each file has name, size, and type.
         for (var i = 0; i < $files.length; i++) {
             var file = $files[i];
@@ -89,6 +95,9 @@ app.controller('fileCtrl', function($scope, $upload) {
                 }).success(function(data, status, headers, config) {
                     // file is uploaded successfully
                     console.log(data);
+                    $scope.loadingShow = false;
+                    $scope.messageImageShow = true;
+                    $scope.imageLink = 'http://test.example.com/#image/' + data.uniq_id + '/' + data.key;;
                 });
             //.error(...)
             //.then(success, error, progress);
@@ -106,4 +115,8 @@ app.controller('noteCtrl', function($scope, $http, $routeParams) {
         .success(function(data) {
             $scope.note = data.data;
         });
+});
+
+app.controller('imageViewCtrl', function($scope, $http, $routeParams) {
+    $scope.imageSrc = '/api/image/' + $routeParams.id + '/' + $routeParams.key;
 });

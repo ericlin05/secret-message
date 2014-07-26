@@ -44,11 +44,12 @@ app.config(function($routeProvider, $locationProvider) {
 });
 
 app.controller('homeCtrl', function ($scope, $http) {
-
+    $scope.test = 'home';
 });
 
 
 app.controller('aboutCtrl', function($scope) {
+    $scope.test = 'about';
     $scope.message = 'Look! I am an about page.';
 });
 
@@ -142,4 +143,10 @@ app.controller('imageViewCtrl', function($scope, $http, $routeParams, ngDialog) 
         className: 'ngdialog-theme-plain',
         scope: $scope
     });
+});
+
+app.controller('navCtrl', function($scope, $location) {
+    $scope.isCurrentPath = function (path) {
+        return $location.path() == path;
+    };
 });

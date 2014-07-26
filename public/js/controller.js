@@ -6,6 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 var app = angular.module('privateStuffApp', ['ngRoute', 'angularFileUpload']);
+var baseUrl = 'http://test.example.com';
 
 app.config(function($routeProvider, $locationProvider) {
     $routeProvider
@@ -22,8 +23,12 @@ app.config(function($routeProvider, $locationProvider) {
            controller : 'contactCtrl'
         })
         .when('/note/:id/:key', {
-            templateUrl : '../pages/note.html',
-            controller : 'noteCtrl'
+            templateUrl : '../pages/note-view.html',
+            controller : 'noteViewCtrl'
+        })
+        .when('/note', {
+            templateUrl : '../pages/note-create.html',
+            controller : 'noteCreateCtrl'
         })
         .when('/image/:id/:key', {
             templateUrl : '../pages/image-view.html',
@@ -39,26 +44,7 @@ app.config(function($routeProvider, $locationProvider) {
 });
 
 app.controller('homeCtrl', function ($scope, $http) {
-    $scope.data = {};
-    $scope.noteLink = '';
-    $scope.noteFormShow = true;
-    $scope.messageNoteShow = false;
-    $scope.loadingShow = false;
 
-    $scope.submitNote = function(item, event) {
-        $scope.loadingShow = true;
-        $scope.noteFormShow = false;
-        var responsePromise = $http.post("/api/note", $("#my_test").val());
-        responsePromise.success(function(data, status, headers, config) {
-            $scope.noteFormShow = false;
-            $scope.messageNoteShow = true;
-            $scope.loadingShow = false;
-            $scope.noteLink = 'http://test.example.com/#note/' + data.uniq_id + '/' + data.key;
-        });
-        responsePromise.error(function(data, status, headers, config) {
-            alert("AJAX failed!");
-        });
-    };
 });
 
 
@@ -74,6 +60,8 @@ app.controller('fileCtrl', function($scope, $upload) {
     $scope.loadingShow = false;
     $scope.messageImageShow = false;
     $scope.imageLink = '';
+    $scope.imageUploadShow = true;
+
     $scope.onFileSelect = function($files) {
         $scope.loadingShow = true;
         //$files: an array of files selected, each file has name, size, and type.
@@ -97,7 +85,8 @@ app.controller('fileCtrl', function($scope, $upload) {
                     console.log(data);
                     $scope.loadingShow = false;
                     $scope.messageImageShow = true;
-                    $scope.imageLink = 'http://test.example.com/#image/' + data.uniq_id + '/' + data.key;;
+                    $scope.imageUploadShow = false;
+                    $scope.imageLink = baseUrl + '/image/' + data.uniq_id + '/' + data.key;;
                 });
             //.error(...)
             //.then(success, error, progress);
@@ -110,9 +99,37 @@ app.controller('fileCtrl', function($scope, $upload) {
     };
 });
 
-app.controller('noteCtrl', function($scope, $http, $routeParams) {
+app.controller('noteCreateCtrl', function ($scope, $http) {
+    $scope.data = {};
+    $scope.noteLink = '';
+    $scope.noteFormShow = true;
+    $scope.messageNoteShow = false;
+    $scope.loadingShow = false;
+
+    $scope.submitNote = function(item, event) {
+        $scope.loadingShow = true;
+        $scope.noteFormShow = false;
+        var responsePromise = $http.post("/api/note", $("#my_test").val());
+        responsePromise.success(function(data, status, headers, config) {
+            $scope.noteFormShow = false;
+            $scope.messageNoteShow = true;
+            $scope.loadingShow = false;
+            $scope.noteLink = baseUrl + '/note/' + data.uniq_id + '/' + data.key;
+        });
+        responsePromise.error(function(data, status, headers, config) {
+            alert("AJAX failed!");
+        });
+    };
+});
+
+app.controller('noteViewCtrl', function($scope, $http, $routeParams) {
+    $scope.showDestroyed = false;
+    $scope.showNote = false;
+
     $http.get("/api/note/" + $routeParams.id + '/' + $routeParams.key)
         .success(function(data) {
+            $scope.showDestroyed = data.status == 'destroyed';
+            $scope.showNote = data.status != 'destroyed';
             $scope.note = data.data;
         });
 });

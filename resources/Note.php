@@ -31,21 +31,27 @@ class Note extends Base
         $db = $this->_getDB();
         $crypt = new Encryption($key);
 
-        $stmt = $db->prepare("SELECT data FROM note WHERE uniq_id = :uniq_id");
+        $stmt = $db->prepare("SELECT data, destroyed_at FROM note WHERE uniq_id = :uniq_id");
         $stmt->execute(array(':uniq_id' => $uniqId));
 
         $ret = array('status' => 'failed', 'data' => null);
 
         if ($stmt->rowCount() > 0) {
-            $data = trim($crypt->decrypt($stmt->fetchColumn()));
-            if($data) {
-                $ret['status'] = 'success';
-                $ret['data'] = $data;
-            }
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            // remove the note
-            $stmt = $db->prepare("UPDATE note SET data = '', destroyed_at = NOW() WHERE uniq_id = :uniq_id");
-            $stmt->execute(array(':uniq_id' => $uniqId));
+            if(!empty($row['destroyed_at'])) {
+                $ret['status'] = 'destroyed';
+            } else {
+                $data = trim($crypt->decrypt($row['data']));
+                if($data) {
+                    $ret['status'] = 'success';
+                    $ret['data'] = $data;
+                }
+
+                // remove the note
+                $stmt = $db->prepare("UPDATE note SET data = '', destroyed_at = NOW() WHERE uniq_id = :uniq_id");
+                $stmt->execute(array(':uniq_id' => $uniqId));
+            }
         }
 
         return json_encode($ret);

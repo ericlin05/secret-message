@@ -1,0 +1,20 @@
+<div id="note-display">
+    <a href="/">Create a new Note</a><br /><br />
+
+    <div ng-show="showNote">
+        This is your message:<br /><br />
+
+        <div id="note-message" style="white-space: pre-line;">
+            {{ note }}
+        </div>
+
+        <div class="note">
+            This note has been destroyed, so if you want to keep its content, you must copy it before closing this page.
+        </div>
+    </div>
+
+    <div ng-show="showDestroyed">
+        The note you requested has already been viewed and destroyed.
+    </div>
+</div>
+

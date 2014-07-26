@@ -45,7 +45,7 @@ class Image extends Base
 
             // remove the note
             $stmt = $db->prepare("UPDATE image SET data = '', destroyed_at = NOW() WHERE uniq_id = :uniq_id");
-            $stmt->execute(array(':uniq_id' => $uniqId));
+//            $stmt->execute(array(':uniq_id' => $uniqId));
         }
     }
 

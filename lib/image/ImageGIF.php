@@ -13,7 +13,7 @@ require_once('Image.php');
  */
 class ImageGIF extends Image
 {
-    public function render()
+    public function render($width = 600)
     {
         // Set the content type header - in this case image/gif
         header('Content-Type: image/gif');
@@ -23,7 +23,12 @@ class ImageGIF extends Image
         // removing the black from the placeholder
         imagecolortransparent($this->_imageResource, $background);
         // Output the image
-        imagegif($this->_imageResource);
+
+        $this->_resize($width);
+
+        // Output the image
+        imagegif($this->_resizeResource);
+        imagedestroy($this->_resizeResource);
         imagedestroy($this->_imageResource);
     }
 }

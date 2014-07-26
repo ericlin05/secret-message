@@ -11,10 +11,13 @@ require_once('Image.php');
  */
 class ImagePNG extends Image
 {
-    public function render()
+    public function render($width = 600)
     {
         // Set the content type header - in this case image/png
         header('Content-Type: image/png');
+
+        $this->_resize($width);
+
         // integer representation of the color black (rgb: 0,0,0)
         $background = imagecolorallocate($this->_imageResource, 0, 0, 0);
         // removing the black from the placeholder
@@ -27,7 +30,10 @@ class ImagePNG extends Image
         // of transparency is preserved)
         imagesavealpha($this->_imageResource, true);
         // Output the image
-        imagepng($this->_imageResource);
+
+        // Output the image
+        imagepng($this->_resizeResource);
+        imagedestroy($this->_resizeResource);
         imagedestroy($this->_imageResource);
     }
 }

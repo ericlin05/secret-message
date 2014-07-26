@@ -13,12 +13,16 @@ require_once('Image.php');
  */
 class ImageJPEG extends Image
 {
-    public function render()
+    public function render($width = 600)
     {
         // Set the content type header - in this case image/jpg
         header('Content-Type: image/jpeg');
+
+        $this->_resize($width);
+
         // Output the image
-        imagejpeg($this->_imageResource);
+        imagejpeg($this->_resizeResource);
+        imagedestroy($this->_resizeResource);
         imagedestroy($this->_imageResource);
     }
 }

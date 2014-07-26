@@ -5,7 +5,7 @@
  * Time: 3:19 PM
  * To change this template use File | Settings | File Templates.
  */
-var app = angular.module('privateStuffApp', ['ngRoute', 'angularFileUpload']);
+var app = angular.module('privateStuffApp', ['ngRoute', 'angularFileUpload', 'ngDialog']);
 var baseUrl = 'http://test.example.com';
 
 app.config(function($routeProvider, $locationProvider) {
@@ -134,6 +134,12 @@ app.controller('noteViewCtrl', function($scope, $http, $routeParams) {
         });
 });
 
-app.controller('imageViewCtrl', function($scope, $http, $routeParams) {
+app.controller('imageViewCtrl', function($scope, $http, $routeParams, ngDialog) {
     $scope.imageSrc = '/api/image/' + $routeParams.id + '/' + $routeParams.key;
+
+    ngDialog.open({
+        template: 'pages/image-dialog.html',
+        className: 'ngdialog-theme-plain',
+        scope: $scope
+    });
 });

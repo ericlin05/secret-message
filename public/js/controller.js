@@ -107,10 +107,20 @@ app.controller('noteCreateCtrl', function ($scope, $http) {
     $scope.messageNoteShow = false;
     $scope.loadingShow = false;
 
+    $scope.notifyBtnShow = true;
+    $scope.notifyFormShow = false;
+
     $scope.submitNote = function(item, event) {
         $scope.loadingShow = true;
         $scope.noteFormShow = false;
-        var responsePromise = $http.post("/api/note", $("#my_test").val());
+        var responsePromise = $http.post(
+            "/api/note",
+            {
+                message:    $("#note-message").val(),
+                email:      $("#email").val(),
+                reference:  $('#reference').val()
+            }
+        );
         responsePromise.success(function(data, status, headers, config) {
             $scope.noteFormShow = false;
             $scope.messageNoteShow = true;
@@ -121,6 +131,11 @@ app.controller('noteCreateCtrl', function ($scope, $http) {
             alert("AJAX failed!");
         });
     };
+
+    $scope.showNotifyForm = function() {
+        $scope.notifyBtnShow = false;
+        $scope.notifyFormShow = true;
+    }
 });
 
 app.controller('noteViewCtrl', function($scope, $http, $routeParams) {

@@ -49,7 +49,9 @@ class Note extends Base
                 }
 
                 // remove the note
-                $stmt = $db->prepare("UPDATE note SET data = '', destroyed_at = NOW() WHERE uniq_id = :uniq_id");
+                $stmt = $db->prepare(
+                    "UPDATE note SET data = '', notify_email = '', notify_reference = '', destroyed_at = NOW() WHERE uniq_id = :uniq_id"
+                );
                 $stmt->execute(array(':uniq_id' => $uniqId));
             }
         }
@@ -67,17 +69,32 @@ class Note extends Base
     {
         $key = Encryption::getRandomKey(13);
 
-        $crypt = new Encryption($key);
-        $encoded = $crypt->encrypt(trim($this->request->data));
+        $data = json_decode($this->request->data, true);
+
+        $crypt      = new Encryption($key);
+        $message    = $crypt->encrypt(trim($data['message']));
+        $email      = $data['email'];
+        $reference  = $data['reference'];
 
         $uniqId = uniqid();
 
         $db = $this->_getDB();
-        $stmt = $db->prepare("INSERT INTO note (uniq_id, data, created_at) VALUES (:id, :data, NOW())");
-        $status = $stmt->execute(array(':id' => $uniqId, ':data' => $encoded));
+        $stmt = $db->prepare(
+            "INSERT INTO note (uniq_id, data, notify_email, notify_reference, created_at) VALUES (:id, :data, :email, :reference, NOW())"
+        );
+        $status = $stmt->execute(
+            array(
+                ':id' => $uniqId, ':data' => $message,
+                ':email' => $email, ':reference' => $reference
+            )
+        );
 
         if($status) {
-            return json_encode(array('status' => 'success', 'key' => $key, 'uniq_id' => $uniqId));
+            return json_encode(
+                array(
+                    'status' => 'success', 'key' => $key, 'uniq_id' => $uniqId
+                )
+            );
         }
 
         return json_encode(array('status' => 'failed'));

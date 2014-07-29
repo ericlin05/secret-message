@@ -44,8 +44,10 @@ class Image extends Base
             $image->render();
 
             // remove the note
-            $stmt = $db->prepare("UPDATE image SET data = '', destroyed_at = NOW() WHERE uniq_id = :uniq_id");
-//            $stmt->execute(array(':uniq_id' => $uniqId));
+            $stmt = $db->prepare(
+                "UPDATE image SET data = '', notify_email = '', notify_reference = '', destroyed_at = NOW() WHERE uniq_id = :uniq_id"
+            );
+            $stmt->execute(array(':uniq_id' => $uniqId));
         }
     }
 
@@ -58,6 +60,9 @@ class Image extends Base
     public function create()
     {
         $key = Encryption::getRandomKey(13);
+
+        $email      = isset($_REQUEST['email'])     ? $_REQUEST['email']        : '';
+        $reference  = isset($_REQUEST['reference']) ? $_REQUEST['reference']    : '';
 
         $types = array(
             'image/jpeg' => 'jpg',
@@ -77,8 +82,20 @@ class Image extends Base
         $uniqId = uniqid();
 
         $db = $this->_getDB();
-        $stmt = $db->prepare("INSERT INTO image (uniq_id, filename, type, data, created_at) VALUES (:id, :filename, :type, :data, NOW())");
-        $status = $stmt->execute(array(':id' => $uniqId, ':filename' => $_FILES['file']['name'], ':type' => $_FILES['file']['type'], ':data' => $encoded));
+        $stmt = $db->prepare(
+            "INSERT INTO image (uniq_id, filename, type, data, notify_email, notify_reference, created_at)
+             VALUES (:id, :filename, :type, :data, :email, :reference, NOW())"
+        );
+        $status = $stmt->execute(
+            array(
+                ':id' => $uniqId,
+                ':filename' => $_FILES['file']['name'],
+                ':type' => $_FILES['file']['type'],
+                ':data' => $encoded,
+                ':email' => $email,
+                ':reference' => $reference
+            )
+        );
 
         if($status) {
             return json_encode(array('status' => 'success', 'key' => $key, 'uniq_id' => $uniqId));

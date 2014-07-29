@@ -64,16 +64,23 @@ app.controller('fileCtrl', function($scope, $upload) {
     $scope.imageUploadShow = true;
 
     $scope.onFileSelect = function($files) {
+        $scope.files = $files;
+    }
+
+    $scope.uploadFiles = function() {
         $scope.loadingShow = true;
         //$files: an array of files selected, each file has name, size, and type.
-        for (var i = 0; i < $files.length; i++) {
-            var file = $files[i];
+        for (var i = 0; i < $scope.files.length; i++) {
+            var file = $scope.files[i];
             $scope.upload = $upload.upload({
                 url: '/api/image', //upload.php script, node.js route, or servlet url
                 method: 'POST',
                 // headers: {'header-key': 'header-value'},
                 // withCredentials: true,
-                data: {test: 1},
+                data: {
+                    email:      $('#email').val(),
+                    reference:  $('#reference').val()
+                },
                 file: file // or list of files: $files for html5 only
                 /* set the file formData name ('Content-Desposition'). Default is 'file' */
                 //fileFormDataName: myFile, //or a list of names for multiple files (html5).
@@ -107,9 +114,6 @@ app.controller('noteCreateCtrl', function ($scope, $http) {
     $scope.messageNoteShow = false;
     $scope.loadingShow = false;
 
-    $scope.notifyBtnShow = true;
-    $scope.notifyFormShow = false;
-
     $scope.submitNote = function(item, event) {
         $scope.loadingShow = true;
         $scope.noteFormShow = false;
@@ -131,11 +135,6 @@ app.controller('noteCreateCtrl', function ($scope, $http) {
             alert("AJAX failed!");
         });
     };
-
-    $scope.showNotifyForm = function() {
-        $scope.notifyBtnShow = false;
-        $scope.notifyFormShow = true;
-    }
 });
 
 app.controller('noteViewCtrl', function($scope, $http, $routeParams) {
@@ -164,4 +163,14 @@ app.controller('navCtrl', function($scope, $location) {
     $scope.isCurrentPath = function (path) {
         return $location.path() == path;
     };
+});
+
+app.controller('notifyCtrl', function($scope, $location) {
+    $scope.notifyBtnShow = true;
+    $scope.notifyFormShow = false;
+
+    $scope.showNotifyForm = function() {
+        $scope.notifyBtnShow = false;
+        $scope.notifyFormShow = true;
+    }
 });

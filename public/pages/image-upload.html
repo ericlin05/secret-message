@@ -1,4 +1,4 @@
-<h1>Private Image</h1>
+<h1>Secret Image</h1>
 <div class="lead" style="text-align: left;">
     <ol>
         <li>Upload your private image below</li>
@@ -16,6 +16,20 @@
          ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
     <button ng-click="upload.abort()">Cancel Upload</button>
     -->
+
+    <div ng-controller="notifyCtrl">
+        <span id="notify-button" ng-show="notifyBtnShow">
+            Notify me when note is read: <input type="checkbox" ng-click="showNotifyForm();"/>
+        </span>
+
+        <span id="notify-form" ng-show="notifyFormShow">
+            Email: <input type="email" name="email" id="email" />
+            Reference: <input type="text" name="reference" id="reference" />
+        </span>
+    </div>
+
+    <br />
+    <p><a class="btn btn-lg btn-success" href="/image" role="button" ng-click="uploadFiles();">Create Image Message</a></p>
 </div>
 
 <div id="image-loading" ng-show="loadingShow">Loading</div>

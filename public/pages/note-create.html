@@ -1,4 +1,4 @@
-<h1>Private Note</h1>
+<h1>Secret Note</h1>
 <div class="lead" style="text-align: left;">
     <ol>
         <li>Enter your private note below</li>
@@ -10,9 +10,9 @@
 <div id="note-form" ng-show="noteFormShow">
     <form>
         <div>
-        <textarea name="note_message" id="note-message" rows="10" cols="80"></textarea>
+            <textarea name="note_message" id="note-message" rows="10" cols="80"></textarea>
         </div>
-        <div>
+        <div ng-controller="notifyCtrl">
             <span id="notify-button" ng-show="notifyBtnShow">
                 Notify me when note is read: <input type="checkbox" ng-click="showNotifyForm();"/>
             </span>
@@ -25,7 +25,7 @@
     </form>
 
     <br />
-    <p><a class="btn btn-lg btn-success" href="/note" role="button" ng-click="submitNote();">Create Note</a></p>
+    <p><a class="btn btn-lg btn-success" href="/note" role="button" ng-click="submitNote();">Create Note Message</a></p>
 </div>
 
 <div id="image-loading" ng-show="loadingShow">Loading</div>

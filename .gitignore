@@ -1,2 +1,8 @@
 composer.lock
 .idea
+bower_components
+node_modules
+dist
+public/css/secret-message.min.css
+public/js/secret-message.min.js
+public/js/secret-message.js

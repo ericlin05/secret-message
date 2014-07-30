@@ -1,0 +1,29 @@
+{
+  "name": "secret-message",
+  "version": "0.0.1",
+  "description": "A project for sending secret messages that will destruct itself after being read",
+  "main": "index.html",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://ericchlin@bitbucket.org/ericchlin/secret-message.git"
+  },
+  "keywords": [
+    "secret"
+  ],
+  "author": "Eric Lin",
+  "license": "ISC",
+  "devDependencies": {
+    "ender": "^2.0.5",
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-cssmin": "^0.10.0",
+    "grunt-contrib-uglify": "^0.5.1",
+    "grunt-ender": "^0.2.1",
+    "grunt-bower-install-simple": "~0.9.3",
+    "grunt-wiredep": "~1.8.0",
+    "grunt-contrib-copy": "~0.5.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "javaee7-angular",
+  "version": "1.0.0",
+  "authors": [
+    "Eric Lin"
+  ],
+  "description": "javaee7-angular JavaScript dependencies.",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.21",
+    "jquery": "1.9.1",
+    "ng-file-upload": "1.4.0",
+    "angular-route": "^1.2.21",
+    "ngDialog": "^0.2.3",
+    "bootstrap": "~3.2.0"
+  }
+}

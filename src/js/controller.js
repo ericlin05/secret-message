@@ -8,7 +8,7 @@
 var app = angular.module('privateStuffApp', ['ngRoute', 'angularFileUpload', 'ngDialog']);
 var baseUrl = 'http://test.example.com';
 
-app.config(function($routeProvider, $locationProvider) {
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider
         .when('/', {
            templateUrl : '../pages/home.html',
@@ -41,23 +41,23 @@ app.config(function($routeProvider, $locationProvider) {
         .otherwise({ redirectTo: '/' });
     // use the HTML5 History API
     $locationProvider.html5Mode(true);
-});
+}]);
 
-app.controller('homeCtrl', function ($scope, $http) {
+app.controller('homeCtrl', ['$scope', function ($scope) {
     $scope.test = 'home';
-});
+}]);
 
 
-app.controller('aboutCtrl', function($scope) {
+app.controller('aboutCtrl', ['$scope', function($scope) {
     $scope.test = 'about';
     $scope.message = 'Look! I am an about page.';
-});
+}]);
 
-app.controller('contactCtrl', function($scope) {
+app.controller('contactCtrl', ['$scope', function($scope) {
     $scope.message = 'Contact us! JK. This is just a demo.';
-});
+}]);
 
-app.controller('fileCtrl', function($scope, $upload) {
+app.controller('fileCtrl', ['$scope', '$upload', function($scope, $upload) {
     $scope.loadingShow = false;
     $scope.messageImageShow = false;
     $scope.imageLink = '';
@@ -105,9 +105,9 @@ app.controller('fileCtrl', function($scope, $upload) {
          It could also be used to monitor the progress of a normal http post/put request with large data*/
         // $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
     };
-});
+}]);
 
-app.controller('noteCreateCtrl', function ($scope, $http) {
+app.controller('noteCreateCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.data = {};
     $scope.noteLink = '';
     $scope.noteFormShow = true;
@@ -135,9 +135,9 @@ app.controller('noteCreateCtrl', function ($scope, $http) {
             alert("AJAX failed!");
         });
     };
-});
+}]);
 
-app.controller('noteViewCtrl', function($scope, $http, $routeParams) {
+app.controller('noteViewCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
     $scope.showDestroyed = false;
     $scope.showNote = false;
 
@@ -147,9 +147,9 @@ app.controller('noteViewCtrl', function($scope, $http, $routeParams) {
             $scope.showNote = data.status != 'destroyed';
             $scope.note = data.data;
         });
-});
+}]);
 
-app.controller('imageViewCtrl', function($scope, $http, $routeParams, ngDialog) {
+app.controller('imageViewCtrl', ['$scope', '$http', '$routeParams', 'ngDialog', function($scope, $http, $routeParams, ngDialog) {
     $scope.imageSrc = '/api/image/' + $routeParams.id + '/' + $routeParams.key;
 
     ngDialog.open({
@@ -157,15 +157,15 @@ app.controller('imageViewCtrl', function($scope, $http, $routeParams, ngDialog) 
         className: 'ngdialog-theme-plain',
         scope: $scope
     });
-});
+}]);
 
-app.controller('navCtrl', function($scope, $location) {
+app.controller('navCtrl', ['$scope', '$location', function($scope, $location) {
     $scope.isCurrentPath = function (path) {
         return $location.path() == path;
     };
-});
+}]);
 
-app.controller('notifyCtrl', function($scope, $location) {
+app.controller('notifyCtrl', ['$scope', '$location', function($scope, $location) {
     $scope.notifyBtnShow = true;
     $scope.notifyFormShow = false;
 
@@ -173,4 +173,4 @@ app.controller('notifyCtrl', function($scope, $location) {
         $scope.notifyBtnShow = false;
         $scope.notifyFormShow = true;
     }
-});
+}]);

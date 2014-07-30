@@ -21,10 +21,9 @@ module.exports = function(grunt) {
                 },
                 // the files to concatenate
                 src: [
-                    "bower_components/es5-shim/es5-shim.js",
+                    "bower_components/ng-file-upload/angular-file-upload-shim.js",
                     "bower_components/angular/angular.js",
                     "bower_components/ng-file-upload/angular-file-upload.js",
-                    "bower_components/ng-file-upload/angular-file-upload-shim.js",
                     "bower_components/angular-route/angular-route.js",
                     "bower_components/ngDialog/js/ngDialog.js",
                     "bower_components/jquery/jquery.js",
@@ -32,7 +31,7 @@ module.exports = function(grunt) {
                     "src/js/controller.js"
                 ],
                 // the location of the resulting JS file
-                dest: 'public/js/<%= pkg.name %>.js'
+                dest: 'dist/js/<%= pkg.name %>.js'
             },
             css: {
                 options: {
@@ -87,7 +86,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-wiredep');
 
     // Default task(s).
-    grunt.registerTask('build', ['bower-install-simple', 'concat', 'cssmin']);
+    grunt.registerTask('build', ['bower-install-simple', 'concat', 'cssmin', 'uglify']);
 
 };
 

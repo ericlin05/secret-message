@@ -1,38 +1,43 @@
 <h2>Secret Note</h2>
 <div class="" style="text-align: left;">
     <ol>
-        <li>Enter your private note below</li>
-        <li>Click on "Create Note" button.</li>
+        <li>Enter your secret note message below</li>
+        <li>Optionally enter your email address and note reference for us to let you know when the message is delivered</li>
+        <li>Click on "Create Note Message" button</li>
         <li>Copy the link and then send to your friend</li>
     </ol>
 </div>
 
-<div id="note-form" ng-show="noteFormShow">
-    <form>
-        <div>
-            <textarea name="note_message" id="note-message" rows="10" cols="80" placeholder="Your secret note here.."></textarea>
-        </div>
-        <div ng-controller="notifyCtrl">
-            <span id="notify-button" ng-show="notifyBtnShow">
-                Notify me when note is read: <input type="checkbox" ng-click="showNotifyForm();"/>
-            </span>
+<div id="image-loading" ng-show="loadingShow" class="progress progress-striped active">
+    <div id="progress-bar" class="progress-bar" style="width: 100%;"></div>
+</div>
 
-            <div id="notify-form" ng-show="notifyFormShow" style="width: 100%; float: left; margin-bottom: 10px;">
+<div id="note-form" ng-show="noteFormShow">
+    <form ng-submit="submitNote();">
+        <div ng-controller="notifyCtrl">
+            <div id="notify-button" ng-show="notifyBtnShow" class="checkbox" style="text-align: left;">
+                <label><input type="checkbox" ng-click="showNotifyForm();"/> Notify me when message is read</label>
+            </div>
+
+            <div id="notify-form" ng-show="notifyFormShow">
                 <div class="form-group">
-                    <input type="email" name="email" id="email" placeholder="Your Email Address" class="form-control"/>
+                    <input type="email" name="email" id="email" placeholder="Notification email will be sent to this address (optional)" class="form-control"/>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="reference" id="reference" placeholder="Note Reference" class="form-control" />
+                    <input type="text" name="reference" id="reference" placeholder="Note reference for you to remember (optional)" class="form-control" />
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <textarea name="note_message" id="note-message" class="form-control" rows="10" cols="80" placeholder="Your secret note here.." required="required"></textarea>
+        </div>
+
+        <div class="form-group">
+            <!--<a class="btn btn-lg btn-success" href="/note" role="button" ng-click="submitNote();">Create Note Message</a>-->
+            <button class="btn btn-primary" type="submit">Create Note Message</button>
+        </div>
     </form>
-
-    <br />
-    <p><a class="btn btn-lg btn-success" href="/note" role="button" ng-click="submitNote();">Create Note Message</a></p>
 </div>
-
-<div id="image-loading" ng-show="loadingShow">Loading</div>
 
 <div id="message-note" ng-show="messageNoteShow">
     <div style="text-align: left; margin-bottom: 10px;">
@@ -41,5 +46,10 @@
         <br />Or if you change your mind, you can <a id="destroy-link" ng-href="{{noteLink}}">destroy it now</a>.
     </div>
 
-    <div id="link-note">{{noteLink}}</div>
+    <div class="alert alert-dismissable alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <div id="link-note">{{noteLink}}</div>
+    </div>
 </div>
+
+

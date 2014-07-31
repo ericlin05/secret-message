@@ -43,7 +43,6 @@ module.exports = function(grunt) {
                     "bower_components/ngDialog/css/ngDialog.css",
                     "bower_components/ngDialog/css/ngDialog-theme-default.css",
                     "src/css/bootstrap.min.css",
-                    "bower_components/bootstrap/dist/css/bootstrap-theme.css",
                     "src/css/jumbotron-narrow.css",
                     "src/css/main.css"
                 ],

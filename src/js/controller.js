@@ -87,15 +87,14 @@ app.controller('fileCtrl', ['$scope', '$upload', function($scope, $upload) {
                 /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
                 //formDataAppender: function(formData, key, val){}
             }).progress(function(evt) {
-                    console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-                }).success(function(data, status, headers, config) {
-                    // file is uploaded successfully
-                    console.log(data);
-                    $scope.loadingShow = false;
-                    $scope.messageImageShow = true;
-                    $scope.imageUploadShow = false;
-                    $scope.imageLink = baseUrl + '/image/' + data.uniq_id + '/' + data.key;;
-                });
+                $('#progress-bar').width(parseInt(100.0 * evt.loaded / evt.total).toString() + '%');
+            }).success(function(data, status, headers, config) {
+                // file is uploaded successfully
+                $scope.loadingShow = false;
+                $scope.messageImageShow = true;
+                $scope.imageUploadShow = false;
+                $scope.imageLink = baseUrl + '/image/' + data.uniq_id + '/' + data.key;;
+            });
             //.error(...)
             //.then(success, error, progress);
             //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.

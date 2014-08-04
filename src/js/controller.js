@@ -87,7 +87,8 @@ app.controller('fileCtrl', ['$scope', '$upload', function($scope, $upload) {
                 /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
                 //formDataAppender: function(formData, key, val){}
             }).progress(function(evt) {
-                $('#progress-bar').width(parseInt(100.0 * evt.loaded / evt.total).toString() + '%');
+                var percentage = parseInt(100.0 * evt.loaded / evt.total).toString() + '%';
+                $('#progress-bar').width(percentage);
             }).success(function(data, status, headers, config) {
                 // file is uploaded successfully
                 $scope.loadingShow = false;
@@ -149,13 +150,24 @@ app.controller('noteViewCtrl', ['$scope', '$http', '$routeParams', function($sco
 }]);
 
 app.controller('imageViewCtrl', ['$scope', '$http', '$routeParams', 'ngDialog', function($scope, $http, $routeParams, ngDialog) {
-    $scope.imageSrc = '/api/image/' + $routeParams.id + '/' + $routeParams.key;
+    $http.get("/api/image/" + $routeParams.id + '/' + $routeParams.key)
+        .success(function(data) {
+            $scope.width = data.width;
+            $scope.height = data.height;
 
-    ngDialog.open({
-        template: 'pages/image-dialog.html',
-        className: 'ngdialog-theme-plain',
-        scope: $scope
-    });
+            var width = $(window).width() < $scope.width ? $(window).width() - 50 : $scope.width;
+            $scope.imageSrc = '/api/image/' + $routeParams.id + '/' + $routeParams.key + '/' + width;
+
+            ngDialog.open({
+                template: 'pages/image-dialog.html',
+                className: 'ngdialog-theme-plain',
+                scope: $scope
+            });
+
+            $scope.$on('ngDialog.opened', function (e, $dialog) {
+                $('.ngdialog-content').width(width + 'px');
+            });
+        });
 }]);
 
 app.controller('navCtrl', ['$scope', '$location', function($scope, $location) {

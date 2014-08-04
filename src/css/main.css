@@ -11,3 +11,7 @@
     font-size: 12px;
     margin-top: 10px;
 }
+
+body.ngdialog-open {
+    overflow: auto !important;
+}

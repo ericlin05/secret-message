@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                 // the files to concatenate
                 src: [
                     "bower_components/ngDialog/css/ngDialog.css",
-                    "bower_components/ngDialog/css/ngDialog-theme-default.css",
+                    "bower_components/ngDialog/css/ngDialog-theme-plain.css",
                     "src/css/bootstrap.min.css",
                     "src/css/jumbotron-narrow.css",
                     "src/css/main.css"
@@ -70,6 +70,17 @@ module.exports = function(grunt) {
                 src: 'dist/js/<%= pkg.name %>.js',
                 dest: 'public/js/<%= pkg.name %>.min.js'
             }
+        },
+        copy: {
+          main: {
+            files: [
+              // includes files within path
+              {src: 'dist/css/secret-message.css', dest: 'public/css/<%= pkg.name %>.min.css'},
+
+              // includes files within path and its sub-directories
+              {src: 'dist/js/secret-message.js', dest: 'public/js/<%= pkg.name %>.min.js'}
+            ]
+          }
         }
     });
 
@@ -85,7 +96,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-wiredep');
 
     // Default task(s).
-    grunt.registerTask('build', ['bower-install-simple', 'concat', 'cssmin', 'uglify']);
+    grunt.registerTask('build',     ['bower-install-simple', 'concat', 'cssmin', 'uglify']);
+    grunt.registerTask('build-dev', ['bower-install-simple', 'concat', 'copy']);
 
 };
 

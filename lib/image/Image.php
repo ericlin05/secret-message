@@ -22,7 +22,12 @@ abstract class Image
     protected function _resize($width = 600)
     {
         list($oWidth, $oHeight) = array(imagesx($this->_imageResource), imagesy($this->_imageResource));
-        $height = ($oHeight / $oWidth) * $width;
+        if($width > $oWidth) {
+            $width = $oWidth;
+            $height = $oHeight;
+        } else {
+            $height = ($oHeight / $oWidth) * $width;
+        }
 
         $this->_resizeResource = imagecreatetruecolor($width, $height);
         imagecopyresampled($this->_resizeResource, $this->_imageResource, 0, 0, 0, 0, $width, $height, $oWidth, $oHeight);

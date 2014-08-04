@@ -15,12 +15,14 @@ require_once('../lib/image/ImageFactory.php');
  *
  * @uri /api/image
  * @uri /api/image/:id/:key
+ * @uri /api/image/:id/:key/:width
  */
 class Image extends Base
 {
     /**
      * @param string $uniqId
      * @param string $key
+     * @param int $width
      *
      * @method GET
      * @provides application/json
@@ -28,7 +30,17 @@ class Image extends Base
      * @return string
      * @throws NotFoundException
      */
-    public function get($uniqId, $key)
+    public function get($uniqId, $key, $width=0)
+    {
+        if($width > 0) {
+            $this->_getImage($uniqId, $key, $width);
+            return '';
+        }
+
+        return $this->_getImageInfo($uniqId);
+    }
+
+    protected function _getImage($uniqId, $key, $width)
     {
         $db = $this->_getDB();
         $crypt = new Encryption($key);
@@ -41,7 +53,7 @@ class Image extends Base
             $imgData = base64_decode($crypt->decrypt($data['data']));
 
             $image = \PrivStuff\Lib\Image\ImageFactory::getImageFromString($data['type'], $imgData);
-            $image->render();
+            $image->render($width);
 
             // remove the note
             $stmt = $db->prepare(
@@ -51,10 +63,27 @@ class Image extends Base
         }
     }
 
+    protected function _getImageInfo($uniqId)
+    {
+        $db = $this->_getDB();
+        $stmt = $db->prepare("SELECT width, height FROM image WHERE uniq_id = :uniq_id");
+        $stmt->execute(array(':uniq_id' => $uniqId));
+
+        $width = 0;
+        $height = 0;
+
+        if ($stmt->rowCount() > 0) {
+            list($width, $height) = $stmt->fetch(\PDO::FETCH_NUM);
+        }
+
+        return json_encode(array('width' => $width, 'height' => $height));
+    }
+
     /**
      * @method POST
      * @provides application/json
      *
+     * @throws \Tonic\Exception
      * @return string
      */
     public function create()
@@ -79,21 +108,25 @@ class Image extends Base
         $fp = fopen($_FILES['file']['tmp_name'], 'r');
         $encoded = $crypt->encrypt(base64_encode(fread($fp, filesize($_FILES['file']['tmp_name']))));
 
+        list($width, $height) = getimagesize($_FILES['file']['tmp_name']);
+
         $uniqId = uniqid();
 
         $db = $this->_getDB();
         $stmt = $db->prepare(
-            "INSERT INTO image (uniq_id, filename, type, data, notify_email, notify_reference, created_at)
-             VALUES (:id, :filename, :type, :data, :email, :reference, NOW())"
+            "INSERT INTO image (uniq_id, filename, type, data, width, height, notify_email, notify_reference, created_at)
+             VALUES (:id, :filename, :type, :data, :width, :height, :email, :reference, NOW())"
         );
         $status = $stmt->execute(
             array(
-                ':id' => $uniqId,
-                ':filename' => $_FILES['file']['name'],
-                ':type' => $_FILES['file']['type'],
-                ':data' => $encoded,
-                ':email' => $email,
-                ':reference' => $reference
+                ':id'           => $uniqId,
+                ':filename'     => $_FILES['file']['name'],
+                ':type'         => $_FILES['file']['type'],
+                ':data'         => $encoded,
+                ':width'        => $width,
+                ':height'       => $height,
+                ':email'        => $email,
+                ':reference'    => $reference
             )
         );
 

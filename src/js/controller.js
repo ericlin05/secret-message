@@ -150,23 +150,28 @@ app.controller('noteViewCtrl', ['$scope', '$http', '$routeParams', function($sco
 }]);
 
 app.controller('imageViewCtrl', ['$scope', '$http', '$routeParams', 'ngDialog', function($scope, $http, $routeParams, ngDialog) {
+    $scope.imageDestroyedMessage = false;
+    $scope.imageSrc = '';
+
     $http.get("/api/image/" + $routeParams.id + '/' + $routeParams.key)
         .success(function(data) {
-            $scope.width = data.width;
-            $scope.height = data.height;
+            var width = $(window).width() < data.width ? $(window).width() - 50 : data.width;
 
-            var width = $(window).width() < $scope.width ? $(window).width() - 50 : $scope.width;
-            $scope.imageSrc = '/api/image/' + $routeParams.id + '/' + $routeParams.key + '/' + width;
+            if(data.destroyed) {
+                $scope.imageDestroyedMessage = true;
+            } else {
+                $scope.imageSrc = '/api/image/' + $routeParams.id + '/' + $routeParams.key + '/' + width;
 
-            ngDialog.open({
-                template: 'pages/image-dialog.html',
-                className: 'ngdialog-theme-plain',
-                scope: $scope
-            });
+                ngDialog.open({
+                    template: 'pages/image-dialog.html',
+                    className: 'ngdialog-theme-plain',
+                    scope: $scope
+                });
 
-            $scope.$on('ngDialog.opened', function (e, $dialog) {
-                $('.ngdialog-content').width(width + 'px');
-            });
+                $scope.$on('ngDialog.opened', function (e, $dialog) {
+                    $('.ngdialog-content').width(width + 'px');
+                });
+            }
         });
 }]);
 

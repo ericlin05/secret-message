@@ -66,17 +66,19 @@ class Image extends Base
     protected function _getImageInfo($uniqId)
     {
         $db = $this->_getDB();
-        $stmt = $db->prepare("SELECT width, height FROM image WHERE uniq_id = :uniq_id");
+        $stmt = $db->prepare("SELECT width, height, destroyed_at FROM image WHERE uniq_id = :uniq_id");
         $stmt->execute(array(':uniq_id' => $uniqId));
 
         $width = 0;
         $height = 0;
+        $destroyed = 0;
 
         if ($stmt->rowCount() > 0) {
-            list($width, $height) = $stmt->fetch(\PDO::FETCH_NUM);
+            list($width, $height, $destroyed_at) = $stmt->fetch(\PDO::FETCH_NUM);
+            $destroyed = !empty($destroyed_at);
         }
 
-        return json_encode(array('width' => $width, 'height' => $height));
+        return json_encode(array('width' => $width, 'height' => $height, 'destroyed' => $destroyed));
     }
 
     /**

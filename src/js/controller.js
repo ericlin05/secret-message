@@ -36,7 +36,15 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
         })
         .when('/image', {
             templateUrl : '../pages/image-upload.html',
-            controller : 'fileCtrl'
+            controller : 'imageUploadCtrl'
+        })
+        .when('/faq', {
+            templateUrl : '../pages/faq.html',
+            controller : 'faqCtrl'
+        })
+        .when('/privacy-policy', {
+            templateUrl : '../pages/privacy-policy.html',
+            controller : 'privacyPolicyCtrl'
         })
         .otherwise({ redirectTo: '/' });
     // use the HTML5 History API
@@ -53,11 +61,45 @@ app.controller('aboutCtrl', ['$scope', function($scope) {
     $scope.message = 'Look! I am an about page.';
 }]);
 
-app.controller('contactCtrl', ['$scope', function($scope) {
-    $scope.message = 'Contact us! JK. This is just a demo.';
+app.controller('contactCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.formShow = true;
+    $scope.successShow = false;
+    $scope.loadingShow = false;
+    $scope.errorShow = false;
+
+    var defaultErrorMessage = "We are unable to process your request at this time, please try again later!";
+
+    $scope.submit = function(item, event) {
+        $scope.loadingShow = true;
+        var responsePromise = $http.post(
+            "/api/contact",
+            {
+                message:    $("#message").val(),
+                email:      $("#email").val(),
+                first_name: $('#first_name').val(),
+                last_name:  $('#last_name').val()
+            }
+        );
+        responsePromise.success(function(data, status, headers, config) {
+            if(status == 201) {
+                $scope.formShow = false;
+                $scope.successShow = true;
+            } else {
+                $scope.errorShow = true;
+                $('#error-message').html(data.message ? data.message : defaultErrorMessage);
+            }
+            $scope.loadingShow = false;
+        });
+
+        responsePromise.error(function(data, status, headers, config) {
+            $scope.loadingShow = false;
+            $scope.errorShow = true;
+            $('#error-message').html(defaultErrorMessage);
+        });
+    };
 }]);
 
-app.controller('fileCtrl', ['$scope', '$upload', function($scope, $upload) {
+app.controller('imageUploadCtrl', ['$scope', '$upload', function($scope, $upload) {
     $scope.loadingShow = false;
     $scope.messageImageShow = false;
     $scope.imageLink = '';
@@ -189,4 +231,12 @@ app.controller('notifyCtrl', ['$scope', '$location', function($scope, $location)
         $scope.notifyBtnShow = false;
         $scope.notifyFormShow = true;
     }
+}]);
+
+app.controller('faqCtrl', ['$scope', function($scope) {
+
+}]);
+
+app.controller('privacyPolicyCtrl', ['$scope', function($scope) {
+
 }]);

@@ -24,6 +24,7 @@
     "grunt-ender": "^0.2.1",
     "grunt-bower-install-simple": "~0.9.3",
     "grunt-wiredep": "~1.8.0",
-    "grunt-contrib-copy": "~0.5.0"
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-rsync" : "0.6.2"
   }
 }

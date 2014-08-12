@@ -32,3 +32,7 @@ form legend {
 .jumbotron p {
     font-size: 16px;
 }
+
+.submit-button {
+    text-align: center;
+}

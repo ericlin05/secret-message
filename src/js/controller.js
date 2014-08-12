@@ -11,16 +11,16 @@ var baseUrl = 'http://test.example.com';
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider
         .when('/', {
-           templateUrl : '../pages/home.html',
-           controller : 'homeCtrl'
+            templateUrl : '../pages/home.html',
+            controller : 'homeCtrl'
         })
         .when('/about', {
-           templateUrl : '../pages/about.html',
-           controller : 'aboutCtrl'
+            templateUrl : '../pages/about.html',
+            controller : 'aboutCtrl'
         })
         .when('/contact', {
-           templateUrl : '../pages/contact.html',
-           controller : 'contactCtrl'
+            templateUrl : '../pages/contact.html',
+            controller : 'contactCtrl'
         })
         .when('/note/:id/:key', {
             templateUrl : '../pages/note-view.html',
@@ -104,10 +104,12 @@ app.controller('imageUploadCtrl', ['$scope', '$upload', function($scope, $upload
     $scope.messageImageShow = false;
     $scope.imageLink = '';
     $scope.imageUploadShow = true;
+    $scope.disableSubmit = true;
 
     $scope.onFileSelect = function($files) {
         $scope.files = $files;
-    }
+        $scope.disableSubmit = $files.length == 0;
+    };
 
     $scope.uploadFiles = function() {
         $scope.loadingShow = true;
@@ -129,15 +131,15 @@ app.controller('imageUploadCtrl', ['$scope', '$upload', function($scope, $upload
                 /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
                 //formDataAppender: function(formData, key, val){}
             }).progress(function(evt) {
-                var percentage = parseInt(100.0 * evt.loaded / evt.total).toString() + '%';
-                $('#progress-bar').width(percentage);
-            }).success(function(data, status, headers, config) {
-                // file is uploaded successfully
-                $scope.loadingShow = false;
-                $scope.messageImageShow = true;
-                $scope.imageUploadShow = false;
-                $scope.imageLink = baseUrl + '/image/' + data.uniq_id + '/' + data.key;;
-            });
+                    var percentage = parseInt(100.0 * evt.loaded / evt.total).toString() + '%';
+                    $('#progress-bar').width(percentage);
+                }).success(function(data, status, headers, config) {
+                    // file is uploaded successfully
+                    $scope.loadingShow = false;
+                    $scope.messageImageShow = true;
+                    $scope.imageUploadShow = false;
+                    $scope.imageLink = baseUrl + '/image/' + data.uniq_id + '/' + data.key;;
+                });
             //.error(...)
             //.then(success, error, progress);
             //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
@@ -155,6 +157,11 @@ app.controller('noteCreateCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.noteFormShow = true;
     $scope.messageNoteShow = false;
     $scope.loadingShow = false;
+    $scope.submitDisabled = $('#note-message').val().length == 0;
+
+    $scope.onKeyUp = function() {
+        $scope.submitDisabled = $('#note-message').val().length == 0;
+    };
 
     $scope.submitNote = function(item, event) {
         $scope.loadingShow = true;

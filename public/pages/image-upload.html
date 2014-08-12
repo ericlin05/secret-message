@@ -39,9 +39,9 @@
         <button ng-click="upload.abort()">Cancel Upload</button>
         -->
 
-        <div class="form-group">
+        <div class="form-group submit-button">
             <!--<a class="btn btn-lg btn-success" href="/note" role="button" ng-click="submitNote();">Create Note Message</a>-->
-            <button class="btn btn-primary" type="submit">Create Image Message</button>
+            <button class="btn btn-primary" type="submit" ng-disabled="disableSubmit">Create Image Message</button>
         </div>
     </form>
 </div>

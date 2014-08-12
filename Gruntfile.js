@@ -42,7 +42,7 @@ module.exports = function(grunt) {
                 src: [
                     "bower_components/ngDialog/css/ngDialog.css",
                     "bower_components/ngDialog/css/ngDialog-theme-plain.css",
-                    "src/css/bootstrap.min.css",
+                    "src/css/superhero.css",
                     "src/css/jumbotron-narrow.css",
                     "src/css/main.css"
                 ],
@@ -76,7 +76,7 @@ module.exports = function(grunt) {
                 src: [
                     "bower_components/ngDialog/css/ngDialog.css",
                     "bower_components/ngDialog/css/ngDialog-theme-plain.css",
-                    "src/css/bootstrap.min.css",
+                    "src/css/superhero.css",
                     "src/css/jumbotron-narrow.css"
                 ],
                 // the location of the resulting JS file
@@ -112,6 +112,8 @@ module.exports = function(grunt) {
 
                     // includes files within path and its sub-directories
                     {src: 'src/js/controller.js', dest: 'public/js/controller.js'},
+                    {src: 'dist/css/<%= pkg.name %>.css', dest: 'public/css/<%= pkg.name %>.css'},
+                    {src: 'dist/js/<%= pkg.name %>.js', dest: 'public/js/<%= pkg.name %>.js'},
 
                     {src: 'src/htaccess/.htaccess_dev', dest: 'public/.htaccess'}
                 ]
@@ -167,7 +169,7 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask('build',     ['bower-install-simple', 'concat:js', 'concat:css', 'cssmin', 'uglify', 'copy:prod', 'rsync:prod']);
-    grunt.registerTask('build-dev', ['bower-install-simple', 'concat:js_dev', 'concat:css_dev', 'uglify', 'copy:dev', 'rsync:dev']);
+    grunt.registerTask('build-dev', ['bower-install-simple', 'concat:js_dev', 'concat:css_dev', 'copy:dev', 'rsync:dev']);
 
 };
 

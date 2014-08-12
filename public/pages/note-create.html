@@ -29,12 +29,14 @@
             </div>
         </div>
         <div class="form-group">
-            <textarea name="note_message" id="note-message" class="form-control" rows="10" cols="80" placeholder="Your secret note here.." required="required"></textarea>
+            <textarea name="note_message" id="note-message" class="form-control" rows="10" cols="80"
+                      placeholder="Your secret note here.." required="required" autofocus
+                      ng-keyup="onKeyUp()"></textarea>
         </div>
 
-        <div class="form-group">
+        <div class="form-group submit-button">
             <!--<a class="btn btn-lg btn-success" href="/note" role="button" ng-click="submitNote();">Create Note Message</a>-->
-            <button class="btn btn-primary" type="submit">Create Note Message</button>
+            <button class="btn btn-primary" type="submit" ng-disabled="submitDisabled">Create Note Message</button>
         </div>
     </form>
 </div>

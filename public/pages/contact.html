@@ -11,25 +11,31 @@
     <h2>Contact Us</h2>
 
     <legend>
-        If you have any questions about using Secret Message, you can send us a feedback or suggestions using the form below.<br /><br />
+        Before submitting the form below, please check our <a href="#faq">FAQ</a> and <a href="#privacy-policy">Privacy Policy</a> first.<br /><br />
 
-        Remember to check the <a href="#faq">Frequently Asked Questions</a> and our <a href="#privacy-policy">Privacy Policy</a> first.
+        If you can't get answers from the information provided in FAQ and Privacy Policy, or you have any other questions regarding the usage of Secret Message,
+        please send us a feedback or suggestions using the form below.<br /><br />
+
+        We will do our best to respond back to you as soon as possible.
     </legend>
 
     <div class="form-group">
-        <input type="text" name="first_name" id="first_name" placeholder="Your First Name" class="form-control" required="required"/>
+        <input type="text" name="first_name" id="first_name" placeholder="Your First Name (Required)" class="form-control" required="required"/>
     </div>
     <div class="form-group">
-        <input type="text" name="last_name" id="last_name" placeholder="Your Last Name" class="form-control" required="required"/>
+        <input type="text" name="last_name" id="last_name" placeholder="Your Last Name (Required)" class="form-control" required="required"/>
     </div>
     <div class="form-group">
-        <input type="email" name="email" id="email" placeholder="Your Email Address" class="form-control" required="required"/>
+        <input type="email" name="email" id="email" placeholder="Your Email Address (Required)" class="form-control" required="required"/>
     </div>
     <div class="form-group">
-        <textarea name="message" id="message" class="form-control" rows="10" cols="80" placeholder="Your comments and suggestions, and thank you in advance." required="required"></textarea>
+        <textarea name="message" id="message" class="form-control" rows="10" cols="80"
+                  placeholder="Your comments and suggestions, and thank you in advance. (Required)"
+                  required="required" maxlength="1000">
+        </textarea>
     </div>
 
-    <div class="form-group">
+    <div class="form-group submit-button">
         <button class="btn btn-primary" type="submit">Submit</button>
     </div>
 </form>

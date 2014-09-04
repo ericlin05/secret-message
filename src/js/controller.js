@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 var app = angular.module('privateStuffApp', ['ngRoute', 'angularFileUpload', 'ngDialog']);
-var baseUrl = 'http://test.example.com';
+var baseUrl = 'http://dev.secretify.com';
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider

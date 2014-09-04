@@ -127,7 +127,7 @@ module.exports = function(grunt) {
         rsync: {
             options: {
                 args: ["--verbose"],
-                exclude: [".git*","*.scss","node_modules","bower_components","data","dist","src",".idea"],
+                exclude: [".git*","*.scss","node_modules","bower_components","data","dist",".idea"],
                 recursive: true
             },
             dist: {
@@ -138,17 +138,17 @@ module.exports = function(grunt) {
             },
             prod: {
                 options: {
-                    src: "../dist/",
-                    dest: "/var/www/site",
-                    host: "user@staging-host",
+                    src: "./",
+                    dest: "/var/www/secretify",
+                    host: "ericlin@www.ericlin.me",
                     delete: true // Careful this option could cause data loss, read the docs!
                 }
             },
             dev: {
                 options: {
                     src: "./",
-                    dest: "/home/ericlin/secret-message",
-                    host: "ericlin@sandbox-ericlin2.eng",
+                    dest: "/var/www/secretify-dev",
+                    host: "ericlin@www.ericlin.me",
                     delete: true // Careful this option could cause data loss, read the docs!
                 }
             }
@@ -168,8 +168,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-rsync');
 
     // Default task(s).
-    grunt.registerTask('build',     ['bower-install-simple', 'concat:js', 'concat:css', 'cssmin', 'uglify', 'copy:prod', 'rsync:prod']);
-    grunt.registerTask('build-dev', ['bower-install-simple', 'concat:js_dev', 'concat:css_dev', 'copy:dev', 'rsync:dev']);
+    grunt.registerTask('build-prod',     ['bower-install-simple', 'concat:js', 'concat:css', 'cssmin', 'uglify', 'copy:prod', 'rsync:prod']);
+    grunt.registerTask('build', ['bower-install-simple', 'concat:js_dev', 'concat:css_dev', 'copy:dev', 'rsync:dev']);
 
 };
 
